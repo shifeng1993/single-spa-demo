@@ -36,7 +36,7 @@ const getManifest = (url, bundle) => new Promise(async (resolve) => {
 })
 singleSpa.registerApplication('vue-child', async () => {
   let vueChild = null;
-  await getManifest('http://127.0.0.1:3000/stats.json', 'app').then(() => {
+  await getManifest('http://127.0.0.1:8080/vueChild/stats.json', 'app').then(() => {
     vueChild = window.vueChild;
   });
   return vueChild
