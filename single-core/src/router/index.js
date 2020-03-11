@@ -6,8 +6,8 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/vue',
-    name: 'Vue',
+    path: '/asdfqwe',
+    name: 'asdfqwe',
     component: Vue
   },
   {

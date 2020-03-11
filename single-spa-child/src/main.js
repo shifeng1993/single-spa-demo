@@ -15,6 +15,11 @@ const vueLifeCycles = singleSpaVue({
   Vue,
   appOptions: options
 })
+if (process.env.NODE_ENV === 'development') {
+  // // 开发环境直接渲染到dom
+  // let {el,...devOptions} = options; // eslint-disable-line
+  // new Vue(devOptions).$mount('#app')
+}
 
 Vue.config.productionTip = false
 

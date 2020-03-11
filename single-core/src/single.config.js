@@ -34,12 +34,19 @@ const getManifest = (url, bundle) => new Promise(async (resolve) => {
     })
   }
 })
-singleSpa.registerApplication('vue-child', async () => {
+
+
+let childProject = process.env.WORK_SPACE_CONFIG.child;
+
+let project = childProject[0]
+singleSpa.registerApplication(project.name, async () => {
   let vueChild = null;
-  await getManifest('http://127.0.0.1:8080/vueChild/stats.json', 'app').then(() => {
-    vueChild = window.vueChild;
+  console.log(`http://127.0.0.1:8080/${project.name}/stats.json`)
+  await getManifest(`http://127.0.0.1:8080/${project.name}/stats.json`, 'app').then(() => {
+    vueChild = window[project.name];
   });
   return vueChild
 }, location => location.pathname.startsWith('/vue'))
+
 
 singleSpa.start();
