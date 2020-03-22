@@ -7,19 +7,18 @@
 const webpack = require('webpack');
 const manifests = require('./project.build')();
 
-const baseManifest = manifests.find(item => item.base);
+const baseManifest = manifests.base;
+const componentManifests = manifests.components;
 
 // 配置代理
 const proxyMap = {};
-manifests.forEach((i) => {
-  if (!i.base) {
-    let pathRewrite = {};
-    pathRewrite[`^${i.path}`] = '/'
-    proxyMap[`${i.path}`] = {
-      target: 'http://' + baseManifest.host + ':' + i.port,
-      changeOrigin: true,
-      pathRewrite
-    }
+componentManifests.forEach((i) => {
+  let pathRewrite = {};
+  pathRewrite[`^${i.path}`] = '/'
+  proxyMap[`${i.path}`] = {
+    target: 'http://' + baseManifest.host + ':' + i.port,
+    changeOrigin: true,
+    pathRewrite
   }
 })
 console.log(proxyMap)
@@ -34,7 +33,6 @@ module.exports = {
   },
   devServer: {
     open: true,
-    host: baseManifest.host,
     port: baseManifest.port,
     https: false,
     hotOnly: false,

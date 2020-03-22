@@ -14,6 +14,12 @@ module.exports = {
   publicPath: `//${manifest.host}:${manifest.port}${manifest.publicPath}`,
   // outputDir: path.join(__dirname, 'hello'),
   configureWebpack: {
+    plugins: [
+      // 全局变量挂到window上
+      new webpack.DefinePlugin({
+        [`${manifest.name}_MANIFEST`]: JSON.stringify(manifest)
+      })
+    ],
     output: {
       library: manifest.name,    // 输出模块名
       libraryTarget: 'window' // 输出模块挂载到window对象上

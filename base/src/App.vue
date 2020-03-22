@@ -29,7 +29,9 @@
 			</a-layout-header>
 			<a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
 				<div id="single-spa-vue">
-					<div id='vue'></div>
+					<div v-for="(item,index) in manifests"
+							 :key="index"
+							 :id='item.name'></div>
 				</div>
 			</a-layout-content>
 		</a-layout>
@@ -41,6 +43,12 @@
 			return {
 				collapsed: false,
 			};
+		},
+		computed: {
+			manifests() {
+				console.log(WORK_SPACE_MANIFEST)// eslint-disable-line
+				return WORK_SPACE_MANIFEST.components // eslint-disable-line
+			}
 		},
 	};
 </script>

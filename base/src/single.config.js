@@ -22,10 +22,9 @@ const runScript = async (url) => {
 // eslint-disable-next-line
 const getManifest = (url, manifest) => new Promise(async (resolve) => {
   const {data} = await axios.get(url);
-  console.log(data)
   const {entrypoints, publicPath} = data;
 
-  const assets = entrypoints['app'].assets; // app是bundle的名称
+  const assets = entrypoints[manifest.bundleEntryName].assets; // app是bundle的名称
   for (let i = 0; i < assets.length; i++) {
     await runScript(publicPath + assets[i]).then(() => {
       if (i === assets.length - 1) {
@@ -35,11 +34,12 @@ const getManifest = (url, manifest) => new Promise(async (resolve) => {
   }
 })
 
-const workSpaceManifest = WORK_SPACE_MANIFEST.filter(item => !item.base); // eslint-disable-line
-const baseManifest = WORK_SPACE_MANIFEST.find(item => item.base); // eslint-disable-line
+
+const baseManifest = WORK_SPACE_MANIFEST.base; // eslint-disable-line
+const componentsManifests = WORK_SPACE_MANIFEST.components;// eslint-disable-line
 
 // 遍历,注册所有模块
-workSpaceManifest.forEach(manifest => {
+componentsManifests.forEach(manifest => {
   singleSpa.registerApplication(manifest.name, async () => {
     let vueChild = null;
     await getManifest(`http://${baseManifest.host}:${baseManifest.port}${manifest.path}/stats.json`, manifest).then(() => {

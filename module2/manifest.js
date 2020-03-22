@@ -6,11 +6,11 @@
  */
 
 const host = 'localhost';
-const port = '3000';
+const port = '3001';
 
 module.exports = {
-  name: "module1", //模块名称
-  path: "/module1", //模块url前缀
+  name: "module2", //模块名称
+  path: "/module2", //模块url前缀
   host,
   port,
   bundleEntryName: 'app', // bundle入口名称

@@ -20,7 +20,8 @@ const manifestName = 'manifest.js';                   // 项目的配置文件�
  */
 function findManiFest() {
   try {
-    let manifestQue = [];
+    let baseManifest = {}
+    let componentManifests = [];
     let projectFiles = fs.readdirSync(projectPath)
     projectFiles.forEach(dirpath => {
       let projectDir = path.join(projectPath, dirpath)
@@ -28,12 +29,19 @@ function findManiFest() {
       if (stats.isDirectory() && /^(?!\.)/.test(dirpath)) {
         let files = fs.readdirSync(projectDir)
         if (files.includes(manifestName)) {
-          let manifest = require(`${projectName}${dirpath}/${manifestName}`);
-          manifestQue.push(manifest);
+          let {base, ...manifest} = require(`${projectName}${dirpath}/${manifestName}`);
+          if (base) {
+            baseManifest = {...manifest}
+          } else {
+            componentManifests.push(manifest);
+          }
         }
       }
     })
-    return manifestQue;
+    return {
+      base: baseManifest,
+      components: componentManifests
+    };
   } catch (e) {
     throw e;
   }

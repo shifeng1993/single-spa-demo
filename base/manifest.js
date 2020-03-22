@@ -6,12 +6,13 @@
  */
 
 module.exports = {
+  base: true,// 基础模块
+  name: 'base',
+  path: '/',
   host: 'localhost',
   port: 8080,
-  "name": "base", //模块名称
-  "path": "/project", //模块url前缀
-  "prefix": "/module-prefix/", //模块文件路径前缀
-  "main": "/module-prefix/main.js", //模块渲染出口文件
-  "store": "/module-prefix/store.js",//模块对外接口
-  "base": true// 基础模块
+  bundleEntryName: 'app',
+  publicPath: '/'
+  // "main": "/module-prefix/main.js", //模块渲染出口文件
+  // "store": "/module-prefix/store.js",//模块对外接口
 }
