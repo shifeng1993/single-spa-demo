@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<div id="nav">
-			module2
+			2222
 			<router-link to="/module1/">Home</router-link> |
 			<router-link to="/module1/about">About</router-link>
 		</div>
