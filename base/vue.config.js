@@ -24,12 +24,50 @@ componentManifests.forEach((i) => {
 console.log(proxyMap)
 module.exports = {
   configureWebpack: {
+    entry: {
+      app: './src/main.js',
+      store: './src/store/index.js'
+    },
+    output: {
+      filename: '[name].[hash].js', // 输出文件名
+      chunkFilename: '[name].[hash].js' // commonChunk 输出文件
+    },
     plugins: [
       // 全局变量挂到window上
       new webpack.DefinePlugin({
         'WORK_SPACE_MANIFEST': JSON.stringify(manifests)
       })
-    ]
+    ],
+    optimization: {
+      splitChunks: {
+        chunks: 'async',  // 默认只分割异步代码块 import() 'async' 'initial' 'all'
+        // minSize: 30000,   // 生成块的最小 单位字节
+        // maxSize: 0,       // 生成块的最大 单位字节
+        // minChunks: 1,     // 分割前必须共享模块的最小块数。
+        // maxAsyncRequests: 5,  // 异步代码块最大并发请求数量
+        // maxInitialRequests: 3,  // 入口处的最大并发请求数量
+        // automaticNameDelimiter: '~', // 生成名称时所用的分隔符
+        // name: true,
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10  // 优先级
+          },
+          // default是打包出来的名称，可以修改，例如改成common
+          default: {
+            minChunks: 2,
+            minSize: 0, // 上面的minsize是默认的配置，这个minsize是自己配置的，所以优先级高
+            priority: -20, // 优先级
+            reuseExistingChunk: true
+          },
+          // 第三方库分离示例 匹配react 和 react-dom，完成打包的分离
+          store: {
+            test: /[\\/]src[\\/]store/,
+            priority: -10  // 优先级
+          },
+        }
+      }
+    }
   },
   devServer: {
     open: true,

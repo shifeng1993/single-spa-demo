@@ -12,7 +12,7 @@ module.exports = {
   host: 'localhost',
   port: 8080,
   bundleEntryName: 'app',
-  publicPath: '/'
-  // "main": "/module-prefix/main.js", //模块渲染出口文件
-  // "store": "/module-prefix/store.js",//模块对外接口
+  publicPath: '/',
+  main: 'app', // bundle入口名称
+  store: 'store' // bundle入口名称
 }

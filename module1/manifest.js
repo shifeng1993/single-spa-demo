@@ -13,21 +13,7 @@ module.exports = {
   path: "/module1", //模块url前缀
   host,
   port,
-  bundleEntryName: 'app', // bundle入口名称
-  publicPath: ''
-  // "main": "/module-prefix/main.js", //模块渲染出口文件
-  // "store": "/module-prefix/store.js"//模块对外接口
+  publicPath: '',
+  main: 'app', // bundle入口名称
+  store: 'store' // bundle入口名称
 }
-
-
-// path
-
-// host
-
-// port
-
-// name
-
-// bundleEntryName // bundle文件名称 默认app
-
-// publicPath  //localhost:3000

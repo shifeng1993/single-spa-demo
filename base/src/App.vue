@@ -26,6 +26,7 @@
 				<a-icon class="trigger"
 								:type="collapsed ? 'menu-unfold' : 'menu-fold'"
 								@click="()=> collapsed = !collapsed" />
+                {{$store.state.userid}}
 			</a-layout-header>
 			<a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
 				<div id="single-spa-vue">
@@ -46,7 +47,7 @@
 		},
 		computed: {
 			manifests() {
-				console.log(WORK_SPACE_MANIFEST)// eslint-disable-line
+				// console.log(WORK_SPACE_MANIFEST)// eslint-disable-line
 				return WORK_SPACE_MANIFEST.components // eslint-disable-line
 			}
 		},

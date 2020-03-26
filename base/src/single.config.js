@@ -4,50 +4,28 @@
  * @Email: shifeng199307@gmail.com
  * @Date: 2020-03-18 19:31:13
  */
+
 import * as singleSpa from 'single-spa';
-import axios from 'axios';
+import {registerApp} from './Register'
 
-const runScript = async (url) => {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = url;
-    script.onload = resolve;
-    script.onerror = reject;
+//全局的事件派发器 (新增)
+import {GlobalEventDistributor} from './GlobalEventDistributor'
 
-    const firstScript = document.getElementsByTagName('script')[0];
-    firstScript.parentNode.insertBefore(script, firstScript);
-  })
-}
-
-// eslint-disable-next-line
-const getManifest = (url, manifest) => new Promise(async (resolve) => {
-  const {data} = await axios.get(url);
-  const {entrypoints, publicPath} = data;
-
-  const assets = entrypoints[manifest.bundleEntryName].assets; // app是bundle的名称
-  for (let i = 0; i < assets.length; i++) {
-    await runScript(publicPath + assets[i]).then(() => {
-      if (i === assets.length - 1) {
-        resolve()
-      }
-    })
-  }
-})
-
-
+// 从window对象上面获取工作空间的manifest
 const baseManifest = WORK_SPACE_MANIFEST.base; // eslint-disable-line
 const componentsManifests = WORK_SPACE_MANIFEST.components;// eslint-disable-line
 
-// 遍历,注册所有模块
-componentsManifests.forEach(manifest => {
-  singleSpa.registerApplication(manifest.name, async () => {
-    let vueChild = null;
-    await getManifest(`http://${baseManifest.host}:${baseManifest.port}${manifest.path}/stats.json`, manifest).then(() => {
-      vueChild = window[manifest.name];
-    });
-    return vueChild
-  }, location => location.hash.startsWith(`#${manifest.path}`)) // hash路由
-});
+async function bootstrap() {
+  // 遍历,注册所有模块
+  componentsManifests.forEach(manifest => {
+    registerApp(manifest, baseManifest);
+  });
 
-// 项目启动
-singleSpa.start();
+  // 注册完成后注入自己的store
+  const globalEventDistributor = new GlobalEventDistributor();
+
+  // 项目启动
+  singleSpa.start();
+}
+
+bootstrap()
