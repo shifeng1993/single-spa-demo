@@ -3,6 +3,7 @@
 		<div id="nav">
 			module1 {{$store.state.userid}}
       <button @click="$store.state.userid+=1">加一</button>
+      <button @click="$router.push('/module1/about')">about</button>
 			<router-link to="/module1/">Home</router-link> |
 			<router-link to="/module1/about">About</router-link>
 		</div>

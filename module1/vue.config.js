@@ -69,7 +69,7 @@ module.exports = {
     }
   },
   devServer: {
-    open: true,
+    open: false,
     port: manifest.port,
     https: false,
     hotOnly: false,
