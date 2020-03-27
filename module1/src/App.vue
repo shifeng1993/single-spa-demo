@@ -1,7 +1,8 @@
 <template>
 	<div id="app">
 		<div id="nav">
-			module1
+			module1 {{$store.state.userid}}
+      <button @click="$store.state.userid+=1">加一</button>
 			<router-link to="/module1/">Home</router-link> |
 			<router-link to="/module1/about">About</router-link>
 		</div>
@@ -9,6 +10,10 @@
 	</div>
 </template>
 
+<script>
+	export default {
+	}
+</script>
 <style lang="less">
 	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
