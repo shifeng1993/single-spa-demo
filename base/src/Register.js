@@ -34,9 +34,10 @@ const runScript = async (url) => {
 }
 
 // 应用注册
-export async function registerApp(manifest, base) {
+export async function registerApp(manifest) {
+  if (!manifest.singleSpa) throw Error(`Module ${manifest.name} manifest.js key "singleSpa" is not true!`);
   /*********************** 加载主文件和对外接口文件js ************************/
-  const baseUrl = `http://${base.host}:${base.port}${manifest.path}`;
+  const baseUrl = `${window.location.origin}${manifest.path}`;
   const statsUrl = `${baseUrl}/stats.json`;
   const {data} = await axios.get(statsUrl);
 

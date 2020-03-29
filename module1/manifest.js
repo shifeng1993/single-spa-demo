@@ -9,6 +9,7 @@ const host = 'localhost';
 const port = '3000';
 
 module.exports = {
+  singleSpa: false,
   name: "module1", //模块名称
   path: "/module1", //模块url前缀
   host,

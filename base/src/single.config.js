@@ -9,13 +9,13 @@ import * as singleSpa from 'single-spa';
 import {registerApp} from './Register'
 
 // 从window对象上面获取工作空间的manifest
-const baseManifest = WORK_SPACE_MANIFEST.base; // eslint-disable-line
+// const baseManifest = WORK_SPACE_MANIFEST.base; // eslint-disable-line
 const componentsManifests = WORK_SPACE_MANIFEST.components;// eslint-disable-line
 
 async function bootstrap() {
   // 遍历,注册所有模块
   componentsManifests.forEach(manifest => {
-    registerApp(manifest, baseManifest);
+    registerApp(manifest);
   });
 
   // 项目启动

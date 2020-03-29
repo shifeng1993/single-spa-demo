@@ -9,34 +9,47 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-let options = {
-  el: `#${require('../manifest').name}`,
-  router,
-  store: new Vuex.Store({}), // 1. 先做个空store挂载全局的this.$store上
-  render: h => h(App),
-  created() {
-    this.$store = this.store // 2. 再用props传来的this.store对空store进行替换
-  },
+const manifest = require('../manifest');
+
+let vueLifeCycles, bootstrap, mount, unmount;
+
+if (manifest.singleSpa) {
+  let options = {
+    el: `#${require('../manifest').name}`,
+    router,
+    store: new Vuex.Store({}), // 1. 先做个空store挂载全局的this.$store上
+    render: h => h(App),
+    created() {
+      this.$store = this.store // 2. 再用props传来的this.store对空store进行替换
+    },
+  }
+
+  vueLifeCycles = singleSpaVue({
+    Vue,
+    appOptions: options
+  })
+
+  bootstrap = (props) => {
+    return vueLifeCycles && vueLifeCycles.bootstrap(props);
+  };
+  mount = (props) => {
+    return vueLifeCycles && vueLifeCycles.mount(props);
+  };
+  unmount = (props) => {
+    return vueLifeCycles && vueLifeCycles.unmount(props);
+  };
+
+} else {
+  new Vue({
+    router,
+    store: new Vuex.Store({}), // 1. 先做个空store挂载全局的this.$store上
+    render: h => h(App)
+  }).$mount('#app')
+
 }
 
-const vueLifeCycles = singleSpaVue({
-  Vue,
-  appOptions: options
-})
-
-Vue.config.productionTip = false
-
-// 启动 
-export const bootstrap = (props) => {
-  return vueLifeCycles.bootstrap(props);
-};
-
-// 挂载
-export const mount = (props) => {
-  return vueLifeCycles.mount(props);
-};
-
-// 卸载
-export const unmount = (props) => {
-  return vueLifeCycles.unmount(props);
-};
+export {
+  bootstrap,
+  mount,
+  unmount
+}
