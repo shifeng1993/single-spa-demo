@@ -10,17 +10,33 @@ const StatsPlugin = require('stats-webpack-plugin');
 const path = require('path');
 const manifest = require('./manifest');
 
+
 module.exports = {
-  publicPath: `//${manifest.host}:${manifest.port}${manifest.publicPath}`,
-  // outputDir: path.join(__dirname, 'hello'),
+  // publicpath 服务器的话是路径，本地开发是固定的ip+端口
+  publicPath: process.env.NODE_ENV === 'production' ? `/${manifest.name}/` : `//${manifest.host}:${manifest.port}`,
+  outputDir: path.join(__dirname, '../dist/', manifest.name),
+  assetsDir: 'static',
+  pages: {
+    app: {
+      // page 的入口
+      entry: './src/main.js',
+      // 模板来源
+      template: 'public/index.html',
+      // 在 dist/index.html 的输出
+      filename: manifest.name + '/index.html',
+      // 当使用 title 选项时，
+      // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
+      title: 'Index Page'
+    },
+  },
   configureWebpack: {
     entry: {
       app: './src/main.js',
       store: './src/store/index.js'
     },
     output: {
-      filename: '[name].[hash].js', // 输出文件名
-      chunkFilename: '[name].[hash].js', // commonChunk 输出文件
+      filename: '[name].js', // 输出文件名
+      chunkFilename: 'static/js/[name].js', // commonChunk 输出文件
       library: [manifest.name, '[name]'],    // 输出模块名
       libraryTarget: 'window' // 输出模块挂载到window对象上
     },
@@ -68,6 +84,7 @@ module.exports = {
       }
     }
   },
+  productionSourceMap: false,
   devServer: {
     open: false,
     port: manifest.port,

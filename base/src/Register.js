@@ -28,8 +28,23 @@ const runScript = async (url) => {
     script.onload = resolve;
     script.onerror = reject;
 
-    const firstScript = document.getElementsByTagName('script')[0];
-    firstScript.parentNode.insertBefore(script, firstScript);
+    let scripts = document.getElementsByTagName('script');
+    let lastScript = scripts[scripts.length - 1];
+    lastScript.parentNode.appendChild(script);
+  })
+}
+// 运行css样式
+const runStyle = async (url) => {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+    link.href = url;
+    link.rel = 'stylesheet';
+    link.onload = resolve;
+    link.onerror = reject;
+
+    let links = document.getElementsByTagName('link');
+    let lastStyle = links[links.length - 1];
+    lastStyle.parentNode.appendChild(link);
   })
 }
 
@@ -47,7 +62,12 @@ export async function registerApp(manifest) {
   const store = assetsByChunkName[manifest.store];
 
   for (let i = 0; i < mainAssets.length; i++) {
-    await runScript(`${baseUrl}/${mainAssets[i]}`)
+    let url = `${baseUrl}/${mainAssets[i]}`;
+    if (/.css/.test(url)) {
+      await runStyle(url)
+    } else if (/.js/.test(url)) {
+      await runScript(url)
+    }
   }
   await runScript(`${baseUrl}/${store}`)
   /*********************** 加载主文件和对外接口文件js ************************/

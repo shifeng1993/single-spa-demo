@@ -6,6 +6,7 @@
  */
 const webpack = require('webpack');
 const manifests = require('./project.build')();
+const path = require('path');
 
 const baseManifest = manifests.base;
 const componentManifests = manifests.components;
@@ -21,16 +22,19 @@ componentManifests.forEach((i) => {
     pathRewrite
   }
 })
-console.log(proxyMap)
+
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+  outputDir: path.join(__dirname, '../dist/'),
+  assetsDir: 'baseModule/static',
   configureWebpack: {
     entry: {
       app: './src/main.js',
       store: './src/store/index.js'
     },
     output: {
-      filename: '[name].[hash].js', // 输出文件名
-      chunkFilename: '[name].[hash].js' // commonChunk 输出文件
+      filename: 'baseModule/[name].js', // 输出文件名
+      chunkFilename: 'baseModule/static/js/[name].js' // commonChunk 输出文件
     },
     plugins: [
       // 全局变量挂到window上
@@ -69,6 +73,7 @@ module.exports = {
       }
     }
   },
+  productionSourceMap: false, // 生产环境的sourcemap
   devServer: {
     open: true,
     port: baseManifest.port,
