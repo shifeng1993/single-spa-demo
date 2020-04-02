@@ -12,7 +12,8 @@ const path = require('path');
 const projectName = '../';                            // 项目工作空间相对于此文件的路径
 const projectPath = path.join(__dirname, projectName) // 项目工作空间的路径
 const manifestName = 'manifest.js';                   // 项目的配置文件名称
-
+const outDir = path.join(__dirname, './public');      // 输出配置到base的public文件夹
+const rootManiFests = 'manifests.json';
 /**
  * @description: 抓取项目中的manifest 配置文件
  * @param {type} 
@@ -53,7 +54,15 @@ function findManiFest() {
  */
 function buildMain() {
   try {
-    let manifests = findManiFest();
+    let outDirFiles = fs.readdirSync(outDir);
+    let manifests = {};
+    if (outDirFiles.indexOf(rootManiFests) > -1) {
+      manifests = fs.readFileSync(path.join(outDir, rootManiFests), {encoding: 'utf8'});
+      manifests = JSON.parse(manifests);
+    } else {
+      manifests = findManiFest();
+      fs.writeFileSync(path.join(outDir, rootManiFests), JSON.stringify(manifests), {encoding: 'utf8'});
+    }
     return manifests;
   } catch (e) {
     throw e;

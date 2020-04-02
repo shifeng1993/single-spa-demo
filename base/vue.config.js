@@ -4,25 +4,29 @@
  * @Email: shifeng199307@gmail.com
  * @Date: 2020-03-17 23:31:42
  */
-const webpack = require('webpack');
-const manifests = require('./project.build')();
 const path = require('path');
+const manifests = require('./project.build')();
 
 const baseManifest = manifests.base;
 const componentManifests = manifests.components;
 
 // 配置代理
 const proxyMap = {};
-componentManifests.forEach((i) => {
-  let pathRewrite = {};
-  pathRewrite[`^${i.path}`] = '/'
-  proxyMap[`${i.path}`] = {
-    target: 'http://' + baseManifest.host + ':' + i.port,
-    changeOrigin: true,
-    pathRewrite
-  }
-})
 
+// dev下生成代理
+if (process.env.NODE_ENV === 'development') {
+  componentManifests.forEach((i) => {
+    let pathRewrite = {};
+    pathRewrite[`^${i.path}`] = '/'
+    proxyMap[`${i.path}`] = {
+      target: 'http://' + baseManifest.host + ':' + i.port,
+      changeOrigin: true,
+      pathRewrite
+    }
+  })
+}
+
+console.log(proxyMap)
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   outputDir: path.join(__dirname, '../dist/'),
@@ -33,14 +37,10 @@ module.exports = {
       store: './src/store/index.js'
     },
     output: {
-      filename: 'baseModule/[name].js', // 输出文件名
-      chunkFilename: 'baseModule/static/js/[name].js' // commonChunk 输出文件
+      filename: 'baseModule/[name].[hash].js', // 输出文件名
+      chunkFilename: 'baseModule/static/js/[name].[hash].js' // commonChunk 输出文件
     },
     plugins: [
-      // 全局变量挂到window上
-      new webpack.DefinePlugin({
-        'WORK_SPACE_MANIFEST': JSON.stringify(manifests)
-      })
     ],
     optimization: {
       splitChunks: {

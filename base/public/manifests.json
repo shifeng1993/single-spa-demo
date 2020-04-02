@@ -1,0 +1,1 @@
+{"base":{"name":"base","path":"/","host":"localhost","port":8080,"bundleEntryName":"app","publicPath":"/","main":"app","store":"store"},"components":[{"singleSpa":true,"name":"module1","path":"/module1","host":"localhost","port":"3000","publicPath":"","main":"app","store":"store"}]}
