@@ -49,7 +49,10 @@
 			manifests() {
 				return window.WORK_SPACE_MANIFEST.components
 			}
-		},
+    },
+    created() {
+      console.log(this.$store)
+    },
 	};
 </script>
 <style lang="less">
