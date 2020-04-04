@@ -4,10 +4,11 @@
  * @Email: shifeng199307@gmail.com
  * @Date: 2020-03-18 19:56:15
  */
-
+import {routes} from '../router';
 export default {
   namespaced: true,
   state: {
+    routes
   },
   mutations: {
   },
